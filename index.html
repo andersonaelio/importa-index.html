@@ -540,7 +540,7 @@ function printDoc(id){
 function confirmDelete(id, backTo, label){
   const sheet = document.getElementById('sheet');
   sheet.innerHTML = `<div class="sheet-handle"></div>
-    <div class="sheet-title">Excluir "${label}"?</div>
+    <div class="sheet-title">Excluir "${esc(label)}"?</div>
     <div class="card"><div class="card-note">Isso apaga de vez, sem volta. Se for um laudo ou documento importante, prefira baixar uma cópia antes.</div></div>
     <button class="btn-primary" style="background:#A6493E" onclick="deleteItem('${id}','${backTo}')">Sim, excluir</button>
     <button class="btn-ghost" onclick="closeSheet()">Cancelar</button>`;
@@ -686,7 +686,7 @@ function renderSheet(){
   else if(state.addStep==='beneficio-cycle'){
     const cycleOptions = Array.from(new Set([1,2,3,4,5, state.draft.cycleYears].filter(Boolean))).sort((a,b)=>a-b);
     html += `<div class="sheet-title">De quanto em quanto tempo renova?</div>
-    <div class="field-input" style="margin-bottom:4px">${state.draft.name}</div>
+    <div class="field-input" style="margin-bottom:4px">${esc(state.draft.name)}</div>
     ${state.draft.note ? `<div class="suggestion-box" style="margin-top:0"><div class="suggestion-sub">${state.draft.note}</div></div>` : ''}
     <div class="chip-row" id="cycleChips">
       ${cycleOptions.map(y=>`<div class="chip-choice ${state.draft.cycleYears===y?'on':''}" onclick="pickCycle(${y})">${y} ano${y>1?'s':''}</div>`).join('')}
@@ -719,7 +719,7 @@ function matchBenefit(val){
           <div class="choice-name" style="font-size:15px">${m.label}</div>
         </div>`).join('')}
       </div>
-      <div style="margin-top:8px"><button class="btn-ghost" style="padding:6px 0" onclick="customBenefit()">Não é nenhum desses, continuar com "${val}"</button></div>`;
+      <div style="margin-top:8px"><button class="btn-ghost" style="padding:6px 0" onclick="customBenefit()">Não é nenhum desses, continuar com "${esc(val)}"</button></div>`;
     state.draft.ambiguous = matches;
   } else if(val.length>1) {
     area.innerHTML = `<button class="btn-primary" style="margin-top:10px" onclick="customBenefit()">Continuar com "${esc(val)}"</button>`;
