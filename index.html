@@ -139,7 +139,7 @@
 <script>
 const SUPABASE_URL = 'https://ieglgeqsyesguekkryoi.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_kw78XH1dvaIcBAKj7gSg6Q_9V2d2uaF';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { detectSessionInUrl: false } });
 
 const KNOWN_BENEFITS = [
   { key:'bpc', aliases:['bpc','loas','bpc loas','benefício assistencial','benefício de prestação continuada','auxílio','auxilio','benefício do governo','beneficio do governo'],
