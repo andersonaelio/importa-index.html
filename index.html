@@ -110,8 +110,9 @@
   .sheet-overlay.open .sheet { transform:translateY(0); }
   .img-viewer { position:fixed; inset:0; background:rgba(20,17,10,.94); z-index:50; display:none; align-items:center; justify-content:center; opacity:0; transition:opacity .2s ease; -webkit-overflow-scrolling:touch; overflow:auto; }
   .img-viewer.open { display:flex; opacity:1; }
-  .img-viewer img { max-width:92%; max-height:92%; object-fit:contain; transition:transform .2s ease; touch-action:pinch-zoom; cursor:zoom-in; border-radius:4px; }
-  .img-viewer img.zoomed { transform:scale(2.1); cursor:zoom-out; }
+  .img-viewer.zoomed-view { align-items:flex-start; justify-content:flex-start; }
+  .img-viewer img { max-width:92%; max-height:92%; object-fit:contain; touch-action:pan-x pan-y; cursor:zoom-in; border-radius:4px; margin:auto; }
+  .img-viewer img.zoomed { max-width:none; max-height:none; width:230%; height:auto; cursor:zoom-out; margin:0; }
   .img-viewer-close { position:fixed; top:16px; right:16px; width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,.15); border:none; color:#fff; font-size:19px; cursor:pointer; z-index:1; transition:background .15s ease; }
   .img-viewer-close:active { background:rgba(255,255,255,.28); }
   .row-thumb, .doc-photo { cursor:pointer; }
@@ -185,7 +186,7 @@
 <div id="printArea" style="display:none"></div>
 <div class="img-viewer" id="imgViewer" onclick="if(event.target===this) closeImgViewer()">
   <button class="img-viewer-close" onclick="closeImgViewer()" aria-label="Fechar">✕</button>
-  <img id="imgViewerImg" alt="" onclick="this.classList.toggle('zoomed')">
+  <img id="imgViewerImg" alt="" onclick="toggleImgZoom(this)">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -469,12 +470,31 @@ function openImgViewer(url, alt){
   const v = document.getElementById('imgViewer');
   const img = document.getElementById('imgViewerImg');
   img.classList.remove('zoomed');
+  v.classList.remove('zoomed-view');
   img.src = url;
   img.alt = alt || 'Foto ampliada';
   v.classList.add('open');
 }
 function closeImgViewer(){
-  document.getElementById('imgViewer').classList.remove('open');
+  const v = document.getElementById('imgViewer');
+  v.classList.remove('open');
+  v.classList.remove('zoomed-view');
+  document.getElementById('imgViewerImg').classList.remove('zoomed');
+}
+function toggleImgZoom(el){
+  const viewer = document.getElementById('imgViewer');
+  const zoomingIn = !el.classList.contains('zoomed');
+  el.classList.toggle('zoomed');
+  viewer.classList.toggle('zoomed-view', zoomingIn);
+  if(zoomingIn){
+    requestAnimationFrame(()=>{
+      viewer.scrollLeft = (viewer.scrollWidth - viewer.clientWidth) / 2;
+      viewer.scrollTop = (viewer.scrollHeight - viewer.clientHeight) / 2;
+    });
+  } else {
+    viewer.scrollLeft = 0;
+    viewer.scrollTop = 0;
+  }
 }
 
 async function savePhotoToDevice(url, filename){
