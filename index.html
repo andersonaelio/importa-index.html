@@ -215,6 +215,11 @@ function showIOSInstallSheet(generic){
 let state = { view: localStorage.getItem('importa_onboarded') ? 'carregando' : 'onboarding', onboardingStep:0, items:[], addStep:null, addType:null, draft:{} };
 
 async function ensureAuth(){
+  if(window.location.search.includes('code=') || window.location.hash.includes('access_token')){
+    try{ await sb.auth.exchangeCodeForSession(window.location.href); }
+    catch(e){ console.error('erro ao trocar código do Google', e); }
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
   const { data: { session } } = await sb.auth.getSession();
   if(!session){
     const { error } = await sb.auth.signInAnonymously();
