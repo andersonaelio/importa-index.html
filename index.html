@@ -341,7 +341,7 @@ function screenDocumentos(){
     docs.forEach(d=>{
       html += `<div class="list-row" onclick="go('documentoDetalhe', '${d.id}')">
         <div class="row-thumb">${d.photoData ? `<img src="${d.photoData}" alt="Foto de ${esc(d.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:11px">` : '📋'}</div>
-        <div class="row-info"><div class="row-name">${esc(d.name)}</div><div class="row-meta">adicionado em ${fmtDate(new Date(d.addedDate))}</div></div>
+        <div class="row-info"><div class="row-name">${esc(d.name||'Documento sem nome')}</div><div class="row-meta">adicionado em ${fmtDate(new Date(d.addedDate))}</div></div>
       </div>`;
     });
   }
@@ -352,7 +352,7 @@ function screenDocumentoDetalhe(){
   const d = state.items.find(i=>i.id===state.viewExtra);
   if(!d){ go('documentos'); return; }
   let html = `<div class="back-row" onclick="go('documentos')">← Documentos</div>
-    <div class="title">${esc(d.name)}</div>
+    <div class="title">${esc(d.name||'Documento sem nome')}</div>
     <div class="subgreet">adicionado em ${fmtDate(new Date(d.addedDate))}</div>`;
   if(d.photoData){
     html += `<img src="${d.photoData}" alt="Foto de ${esc(d.name)}" style="width:100%;border-radius:16px;box-shadow:0 1px 6px rgba(47,51,44,.08)">`;
@@ -476,7 +476,7 @@ function renderSheet(){
     <div class="photo-box" id="photoBox_doc" onclick="document.getElementById('photoInput').click()" aria-label="Tirar ou escolher foto do documento">${state.draft.photoData ? `<img src="${state.draft.photoData}" alt="Foto do documento" style="width:100%;height:100%;object-fit:cover;border-radius:12px">` : '📷 Toque para tirar foto ou escolher da galeria'}</div>
     <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event,'documento')">
     <input class="field-input" id="docName" aria-label="Nome do documento" placeholder="ex: Laudo médico" value="${esc(state.draft.name||'')}">
-    <button class="btn-primary" onclick="saveDoc()">Guardar</button>
+    <button class="btn-primary" id="btnSaveDoc" onclick="saveDoc()">Guardar</button>
     <button class="btn-ghost" onclick="openAdd()">voltar</button>`;
   }
   else if(state.addStep==='consulta'){
@@ -489,7 +489,7 @@ function renderSheet(){
     <input class="field-input" type="date" id="cDate" aria-label="Data da consulta">
     <div class="photo-box" id="photoBox_consulta" onclick="document.getElementById('photoInput').click()" aria-label="Anexar foto da consulta, opcional">${state.draft.photoData ? `<img src="${state.draft.photoData}" alt="Foto anexada à consulta" style="width:100%;height:100%;object-fit:cover;border-radius:12px">` : '📷 Anexar foto (opcional)'}</div>
     <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event,'consulta')">
-    <button class="btn-primary" onclick="saveConsulta()">Guardar</button>
+    <button class="btn-primary" id="btnSaveConsulta" onclick="saveConsulta()">Guardar</button>
     <button class="btn-ghost" onclick="openAdd()">voltar</button>`;
   }
   else if(state.addStep==='beneficio-name'){
@@ -508,7 +508,7 @@ function renderSheet(){
     </div>
     <div class="field-label">Última renovação</div>
     <input class="field-input" type="date" id="bDate" aria-label="Data da última renovação">
-    <button class="btn-primary" onclick="saveBenefit()">Anotar</button>
+    <button class="btn-primary" id="btnSaveBenefit" onclick="saveBenefit()">Anotar</button>
     <button class="btn-ghost" onclick="chooseType('beneficio')">voltar</button>`;
   }
   document.getElementById('sheet').innerHTML = html;
@@ -589,6 +589,8 @@ async function saveDoc(){
   const name = document.getElementById('docName').value.trim();
   if(!name) return;
   state.saving = true;
+  const btn = document.getElementById('btnSaveDoc');
+  if(btn){ btn.disabled = true; btn.textContent = 'Salvando...'; btn.style.opacity = '0.7'; }
   try{
     let photo_path = null;
     if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'documento');
@@ -605,6 +607,8 @@ async function saveConsulta(){
   const date = document.getElementById('cDate').value;
   if(!subject || !date) return;
   state.saving = true;
+  const btnC = document.getElementById('btnSaveConsulta');
+  if(btnC){ btnC.disabled = true; btnC.textContent = 'Salvando...'; btnC.style.opacity = '0.7'; }
   try{
     let photo_path = null;
     if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'consulta');
@@ -618,6 +622,8 @@ async function saveBenefit(){
   const date = document.getElementById('bDate').value;
   if(!date || !state.draft.cycleYears) return;
   state.saving = true;
+  const btnB = document.getElementById('btnSaveBenefit');
+  if(btnB){ btnB.disabled = true; btnB.textContent = 'Anotando...'; btnB.style.opacity = '0.7'; }
   try{
     const row = await insertItem('beneficio', state.draft.name, { name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
     if(row) state.items.push({ id: row.id, type:'beneficio', name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
