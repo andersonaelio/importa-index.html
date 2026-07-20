@@ -245,6 +245,8 @@ async function loadItems(){
     if(error) throw error;
     state.items = await Promise.all((data||[]).map(async row=>{
       const item = { id: row.id, type: row.tipo, ...row.dados };
+      if(row.tipo==='consulta') item.subject = row.nome;
+      else item.name = row.nome;
       if(row.dados && row.dados.photo_path){ item.photoData = await getSignedUrl(row.dados.photo_path); }
       return item;
     }));
@@ -362,7 +364,7 @@ function screenDocumentoDetalhe(){
     html += `<button class="btn-primary" style="margin-top:0" onclick="printDoc('${d.id}')">🖨️ Imprimir / salvar como PDF</button>
     <a href="${d.photoData}" download="${d.name.replace(/[^a-z0-9]/gi,'_')}.jpg" target="_blank" rel="noopener" class="btn-primary" style="margin-top:10px;text-decoration:none;display:block;text-align:center;box-sizing:border-box">⬇️ Baixar imagem</a>`;
   }
-  html += `<button class="btn-ghost" style="color:#A6493E" onclick="deleteItem('${d.id}','documentos')">Excluir documento</button>`;
+  html += `<button class="btn-ghost" style="color:#A6493E" onclick="confirmDelete('${d.id}','documentos','${esc(d.name)}')">Excluir documento</button>`;
   document.getElementById('content').innerHTML = html;
 }
 
@@ -372,6 +374,17 @@ function printDoc(id){
   const area = document.getElementById('printArea');
   area.innerHTML = `<h2>${esc(d.name)}</h2><p>Adicionado em ${fmtDate(new Date(d.addedDate))}</p>${d.photoData ? `<img src="${d.photoData}" style="max-width:100%">` : ''}`;
   window.print();
+}
+
+function confirmDelete(id, backTo, label){
+  const sheet = document.getElementById('sheet');
+  sheet.innerHTML = `<div class="sheet-handle"></div>
+    <div class="sheet-title">Excluir "${label}"?</div>
+    <div class="card"><div class="card-note">Isso apaga de vez, sem volta. Se for um laudo ou documento importante, prefira baixar uma cópia antes.</div></div>
+    <button class="btn-primary" style="background:#A6493E" onclick="deleteItem('${id}','${backTo}')">Sim, excluir</button>
+    <button class="btn-ghost" onclick="closeSheet()">Cancelar</button>`;
+  a11yEnhance(sheet);
+  document.getElementById('sheetOverlay').classList.add('open');
 }
 
 async function deleteItem(id, backTo){
@@ -572,32 +585,44 @@ function handlePhoto(evt, mode){
 }
 
 async function saveDoc(){
+  if(state.saving) return;
   const name = document.getElementById('docName').value.trim();
   if(!name) return;
-  let photo_path = null;
-  if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'documento');
-  const addedDate = new Date().toISOString();
-  const row = await insertItem('documento', name, { addedDate, photo_path });
-  if(row) state.items.push({ id: row.id, type:'documento', name, addedDate, photoData: photo_path ? await getSignedUrl(photo_path) : null });
-  go('documentos');
+  state.saving = true;
+  try{
+    let photo_path = null;
+    if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'documento');
+    const addedDate = new Date().toISOString();
+    const row = await insertItem('documento', name, { addedDate, photo_path });
+    if(row) state.items.push({ id: row.id, type:'documento', name, addedDate, photoData: photo_path ? await getSignedUrl(photo_path) : null });
+    go('documentos');
+  } finally { state.saving = false; }
 }
 async function saveConsulta(){
+  if(state.saving) return;
   const subject = document.getElementById('cSubject').value.trim();
   const doctor = document.getElementById('cDoctor').value.trim();
   const date = document.getElementById('cDate').value;
   if(!subject || !date) return;
-  let photo_path = null;
-  if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'consulta');
-  const row = await insertItem('consulta', subject, { subject, doctor, date, photo_path });
-  if(row) state.items.push({ id: row.id, type:'consulta', subject, doctor, date, photoData: photo_path ? await getSignedUrl(photo_path) : null });
-  go('consultas');
+  state.saving = true;
+  try{
+    let photo_path = null;
+    if(state.draft.photoData) photo_path = await uploadPhoto(state.draft.photoData, 'consulta');
+    const row = await insertItem('consulta', subject, { subject, doctor, date, photo_path });
+    if(row) state.items.push({ id: row.id, type:'consulta', subject, doctor, date, photoData: photo_path ? await getSignedUrl(photo_path) : null });
+    go('consultas');
+  } finally { state.saving = false; }
 }
 async function saveBenefit(){
+  if(state.saving) return;
   const date = document.getElementById('bDate').value;
   if(!date || !state.draft.cycleYears) return;
-  const row = await insertItem('beneficio', state.draft.name, { name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
-  if(row) state.items.push({ id: row.id, type:'beneficio', name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
-  go('beneficios');
+  state.saving = true;
+  try{
+    const row = await insertItem('beneficio', state.draft.name, { name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
+    if(row) state.items.push({ id: row.id, type:'beneficio', name:state.draft.name, renewedDate:date, cycleYears:state.draft.cycleYears });
+    go('beneficios');
+  } finally { state.saving = false; }
 }
 
 /* ---------- ONBOARDING ---------- */
