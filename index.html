@@ -3,19 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#EEF1EB">
+<meta name="theme-color" content="#F1EAD9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Importa">
-<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Importa%22%2C%22short_name%22%3A%22Importa%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23EEF1EB%22%2C%22theme_color%22%3A%22%23EEF1EB%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520100%2520100%2527%253E%253Crect%2520width%253D%2527100%2527%2520height%253D%2527100%2527%2520rx%253D%252722%2527%2520fill%253D%2527%25233E5A44%2527%252F%253E%253Ctext%2520x%253D%252750%2527%2520y%253D%252568%2527%2520font-size%253D%252755%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527%2523F4F7F1%2527%2520font-family%253D%2527sans-serif%2527%253EI%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%233E5A44'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='%23F4F7F1' font-family='sans-serif'%3EI%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Importa%22%2C%22short_name%22%3A%22Importa%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F1EAD9%22%2C%22theme_color%22%3A%22%23F1EAD9%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520100%2520100%2527%253E%253Crect%2520width%253D%2527100%2527%2520height%253D%2527100%2527%2520rx%253D%252722%2527%2520fill%253D%2527%25232E4A38%2527%252F%253E%253Ctext%2520x%253D%252750%2527%2520y%253D%252568%2527%2520font-size%253D%252755%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527%2523F6F1E4%2527%2520font-family%253D%2527sans-serif%2527%253EI%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232E4A38'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='%23F6F1E4' font-family='sans-serif'%3EI%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Importa">
 <meta property="og:description" content="Documentos, benefícios e consultas num lugar só — pensado pra pessoas com deficiência e neurodivergência.">
 <title>Importa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Figtree:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /*
+    MAPA DO ARQUIVO (manter atualizado a cada seção nova/movida)
+    L1-17     head, meta, manifest, fonts
+    L18-127   CSS — variáveis visuais, componentes (card, list-row, sheet, nav, botões)
+    L128-140  body — shell do app (.phone, content, nav, sheet-overlay)
+    L142-580  JS — boot, auth, Supabase, PDF export, showIOSInstallSheet()
+    L581-1024 JS — renderSheet() (fluxo de adicionar documento/consulta/benefício)
+    L1025-fim JS — render() (todas as telas: home, listas, detalhe, conta, onboarding)
+  */
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body {
     font-family:'Wix Madefor Text', sans-serif;
@@ -29,8 +38,14 @@
     display:flex; flex-direction:column; position:relative;
     transition: background 0.3s ease;
   }
-  .light { background:#EEF1EB; }
+  .light { background:#F1EAD9; }
   .dark { background:#202823; }
+  .phone::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity:.05; mix-blend-mode:multiply;
+  }
+  .dark.phone::after { opacity:.05; mix-blend-mode:overlay; }
 
   .content { padding:56px 22px 0; flex:1; display:flex; flex-direction:column; gap:11px; overflow-y:auto; }
   .content::-webkit-scrollbar { display:none; }
@@ -38,9 +53,9 @@
   .back-row { font-size:14px; color:#5D655C; display:flex; align-items:center; gap:5px; cursor:pointer; }
   .dark .back-row { color:#8FAF8B; }
 
-  .greet { font:500 30px/1.15 'Bricolage Grotesque', sans-serif; color:#272B26; }
+  .greet { font:500 30px/1.15 'Newsreader', serif; color:#2B2519; }
   .subgreet { font-size:14px; color:#6A6E60; margin-top:3px; }
-  .title { font:500 28px/1.15 'Bricolage Grotesque', sans-serif; color:#272B26; margin-top:4px; }
+  .title { font:500 28px/1.15 'Newsreader', serif; color:#2B2519; margin-top:4px; }
   .dark .title { font:400 28px/1.15 'Newsreader', serif; color:#ECEFE6; }
   .dark .subtitle { font:italic 400 14.5px 'Newsreader', serif; color:#A9B3A6; margin-top:3px; }
 
@@ -50,9 +65,10 @@
   .tag-attention { font:600 13px 'Wix Madefor Text', sans-serif; color:#A67A2E; display:flex; align-items:center; gap:7px; margin-top:6px; }
   .dot-amber { width:8px; height:8px; border-radius:50%; background:#C2903E; flex-shrink:0; }
 
-  .card { background:#F9FAF6; border-radius:16px; padding:16px 17px; box-shadow:0 1px 6px rgba(47,51,44,.07); }
+  .card { background:#FBF7EC; border-radius:16px; padding:16px 17px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 8px 20px rgba(43,37,25,.09); transition:transform .15s ease, opacity .15s ease; }
+  .card[onclick]:active { transform:scale(0.97); opacity:.85; }
   .dark .card { background:#2A342D; box-shadow:none; }
-  .card-title { font:600 17px/1.3 'Bricolage Grotesque', sans-serif; color:#272B26; }
+  .card-title { font:600 17px/1.3 'Newsreader', serif; color:#2B2519; }
   .dark .card-title { font:500 18px/1.3 'Newsreader', serif; color:#ECEFE6; }
   .card-sub { font-size:13.5px; color:#6A6E60; margin-top:3px; }
   .dark .card-sub { color:#A9B3A6; }
@@ -62,14 +78,15 @@
   .calm-block { background:#DCE7D8; border-radius:16px; padding:14px 17px; display:flex; align-items:center; justify-content:space-between; }
   .calm-txt { font-size:14px; color:#374A3B; display:flex; align-items:center; gap:9px; }
 
-  .search { background:#F9FAF6; border-radius:999px; padding:12px 17px; font-size:14px; color:#5D655C; box-shadow:0 1px 6px rgba(47,51,44,.06); }
+  .search { background:#FBF7EC; border-radius:999px; padding:12px 17px; font-size:14px; color:#5D655C; box-shadow:0 1px 6px rgba(43,37,25,.06); }
 
-  .list-row { background:#F9FAF6; border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 6px rgba(47,51,44,.06); cursor:pointer; }
+  .list-row { background:#FBF7EC; border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 6px 16px rgba(43,37,25,.08); cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
+  .list-row:active { transform:scale(0.97); opacity:.85; }
   .row-thumb { width:40px; height:40px; border-radius:11px; background:#DCE7D8; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
   .row-info { flex:1; min-width:0; }
-  .row-name { font-size:15px; font-weight:500; color:#272B26; }
+  .row-name { font-size:15px; font-weight:500; color:#2B2519; }
   .row-meta { font-size:13px; color:#7A8177; margin-top:2px; }
-  .chip-ok { font-size:13px; padding:3px 9px; border-radius:999px; background:#DCE7D8; color:#3E5A44; white-space:nowrap; }
+  .chip-ok { font-size:13px; padding:3px 9px; border-radius:999px; background:#DCE7D8; color:#2E4A38; white-space:nowrap; }
 
   .ring-row { display:flex; align-items:center; gap:15px; }
 
@@ -77,34 +94,50 @@
   .dark .empty-state { color:#77817A; border-color:#3B473D; }
 
   .nav-row { padding:12px 22px 26px; display:flex; justify-content:space-around; align-items:center; position:relative; }
-  .nav-item { font:600 12.5px 'Wix Madefor Text', sans-serif; color:#7A8177; width:76px; text-align:center; cursor:pointer; }
-  .nav-item.active { color:#272B26; }
+  .nav-item { font:600 12.5px 'Wix Madefor Text', sans-serif; color:#7A8177; width:76px; text-align:center; cursor:pointer; transition:color .15s ease, transform .15s ease; }
+  .nav-item.active { color:#2B2519; }
+  .nav-item:active { transform:scale(0.92); }
   .dark .nav-item { color:#8F998C; }
   .dark .nav-item.active { color:#ECEFE6; }
-  .fab { width:58px; height:58px; border-radius:50%; background:#3E5A44; color:#F4F7F1; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:300; margin-top:-32px; box-shadow:0 4px 14px rgba(62,90,68,.3); cursor:pointer; border:none; }
+  .fab { width:58px; height:58px; border-radius:50%; background:#2E4A38; color:#F6F1E4; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:300; margin-top:-32px; box-shadow:0 4px 14px rgba(46,74,56,.3); cursor:pointer; border:none; transition:transform .15s ease, box-shadow .15s ease; }
+  .fab:active { transform:scale(0.9); box-shadow:0 2px 8px rgba(46,74,56,.3); }
   .dark .fab { background:#C6D9BC; color:#202823; box-shadow:0 4px 18px rgba(198,217,188,.25); }
 
   /* Sheet (add flow) */
-  .sheet-overlay { position:absolute; inset:0; background:rgba(39,43,38,.35); display:none; align-items:flex-end; z-index:10; }
-  .sheet-overlay.open { display:flex; }
-  .sheet { background:#F7F5EF; border-radius:24px 24px 0 0; padding:14px 22px 32px; width:100%; max-height:88%; overflow-y:auto; }
+  .sheet-overlay { position:absolute; inset:0; background:rgba(39,43,38,0); display:flex; align-items:flex-end; z-index:10; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .25s ease, background .25s ease, visibility 0s linear .25s; }
+  .sheet-overlay.open { opacity:1; visibility:visible; pointer-events:auto; background:rgba(39,43,38,.35); transition:opacity .25s ease, background .25s ease, visibility 0s linear 0s; }
+  .sheet { background:#F7F5EF; border-radius:24px 24px 0 0; padding:14px 22px 32px; width:100%; max-height:88%; overflow-y:auto; transform:translateY(28px); transition:transform .3s cubic-bezier(.22,.68,0,1.01); }
+  .sheet-overlay.open .sheet { transform:translateY(0); }
   .sheet-handle { width:38px; height:4px; border-radius:2px; background:#D5D2C6; margin:0 auto 18px; }
-  .sheet-title { font:500 22px/1.2 'Bricolage Grotesque', sans-serif; color:#272B26; margin-bottom:16px; }
-  .choice-card { background:#FCFBF7; border-radius:16px; padding:16px; box-shadow:0 1px 6px rgba(47,51,44,.07); margin-bottom:10px; cursor:pointer; }
-  .choice-name { font-size:16px; font-weight:600; color:#272B26; }
+  .sheet-title { font:500 22px/1.2 'Newsreader', serif; color:#2B2519; margin-bottom:16px; }
+  .choice-card { background:#FDF9EF; border-radius:16px; padding:16px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 8px 20px rgba(43,37,25,.09); margin-bottom:10px; cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
+  .choice-card:active { transform:scale(0.97); opacity:.85; }
+  .choice-name { font-size:16px; font-weight:600; color:#2B2519; }
   .choice-sub { font-size:13px; color:#6A6E60; margin-top:2px; }
   .field-label { font-size:13px; font-weight:600; color:#6A6E60; text-transform:uppercase; letter-spacing:.4px; margin:14px 0 6px; }
-  .field-input { width:100%; background:#FCFBF7; border:1px solid #E2DFD4; border-radius:12px; padding:13px 15px; font-size:15px; color:#272B26; font-family:'Wix Madefor Text', sans-serif; }
+  .field-input { width:100%; background:#FDF9EF; border:1px solid #E2DFD4; border-radius:12px; padding:13px 15px; font-size:15px; color:#2B2519; font-family:'Wix Madefor Text', sans-serif; transition:border-color .15s ease; }
+  .field-input:focus { border-color:#2E4A38; outline:none; }
   .chip-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-  .chip-choice { padding:9px 16px; border-radius:999px; font-size:13.5px; background:#FCFBF7; box-shadow:0 1px 4px rgba(47,51,44,.08); cursor:pointer; color:#272B26; }
-  .chip-choice.on { background:#2F332C; color:#FCFBF7; }
+  .chip-choice { padding:9px 16px; border-radius:999px; font-size:13.5px; background:#FDF9EF; box-shadow:0 1px 4px rgba(43,37,25,.08); cursor:pointer; color:#2B2519; transition:background .15s ease, color .15s ease, transform .15s ease; }
+  .chip-choice.on { background:#2F332C; color:#FDF9EF; }
+  .chip-choice:active { transform:scale(0.95); }
   .suggestion-box { background:#E4EBE0; border-radius:14px; padding:14px 16px; margin-top:10px; }
-  .suggestion-name { font:500 16px 'Bricolage Grotesque', sans-serif; color:#2F332C; }
+  .suggestion-name { font:500 16px 'Newsreader', serif; color:#2F332C; }
   .suggestion-sub { font-size:13px; color:#5E6B58; margin-top:3px; }
-  .btn-primary { width:100%; background:#3E5A44; color:#F4F7F1; border:none; border-radius:999px; padding:15px; font-size:15.5px; font-weight:600; margin-top:18px; cursor:pointer; font-family:'Wix Madefor Text', sans-serif; }
-  .btn-ghost { width:100%; background:none; border:none; color:#6A6E60; padding:12px; font-size:14px; text-align:center; cursor:pointer; }
-  .photo-box { height:120px; border:1.5px dashed #B9B3A6; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#8a8474; font-size:13px; margin-top:10px; cursor:pointer; overflow:hidden; }
-  [tabindex]:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid #3E5A44; outline-offset:2px; }
+  .btn-primary { width:100%; background:#2E4A38; color:#F6F1E4; border:none; border-radius:999px; padding:15px; font-size:15.5px; font-weight:600; margin-top:18px; cursor:pointer; font-family:'Wix Madefor Text', sans-serif; transition:transform .15s ease, opacity .15s ease; }
+  .btn-primary:active { transform:scale(0.98); opacity:.9; }
+  .btn-ghost { width:100%; background:none; border:none; color:#6A6E60; padding:12px; font-size:14px; text-align:center; cursor:pointer; transition:opacity .15s ease; }
+  .btn-ghost:active { opacity:.6; }
+  .photo-box { height:120px; border:1.5px dashed #B9B3A6; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#8a8474; font-size:13px; margin-top:10px; cursor:pointer; overflow:hidden; transition:border-color .15s ease, opacity .15s ease; }
+  .photo-box:active { opacity:.7; }
+  .pix-panel { background:#F1EAD9; border-radius:16px; padding:20px 18px; margin-top:14px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
+  .dark .pix-panel { background:#242E27; }
+  .pix-qr-img { width:156px; height:156px; border-radius:10px; background:#fff; padding:10px; image-rendering:pixelated; }
+  .pix-panel-label { font-size:13px; color:#6A6E60; }
+  .dark .pix-panel-label { color:#A9B3A6; }
+  .pix-key { font-family:ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size:13.5px; word-break:break-all; color:#2B2519; background:#FBF7EC; border-radius:10px; padding:9px 12px; width:100%; }
+  .dark .pix-key { color:#ECEFE6; background:#2A342D; }
+  [tabindex]:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid #2E4A38; outline-offset:2px; }
   .dark [tabindex]:focus-visible, .dark button:focus-visible { outline-color:#C6D9BC; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation:none !important; } }
   @media print {
@@ -139,6 +172,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script>
 const SUPABASE_URL = 'https://ktaeovvddcuwmunzpnst.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_fTWixHM0v6zD8Z_3QncZrA_ihnOwa4e';
@@ -339,7 +373,7 @@ function screenHoje(){
   }
 
   if(calmCount > 0){
-    html += `<div class="calm-block"><div class="calm-txt">✓ Mais ${calmCount} ${calmCount===1?'item guardado':'itens guardados'} e em dia</div><span onclick="go('guardados')" aria-label="Ver Guardados" style="color:#3E5A44">›</span></div>`;
+    html += `<div class="calm-block"><div class="calm-txt">✓ Mais ${calmCount} ${calmCount===1?'item guardado':'itens guardados'} e em dia</div><span onclick="go('guardados')" aria-label="Ver Guardados" style="color:#2E4A38">›</span></div>`;
   }
 
   if(state.items.length===0){
@@ -396,7 +430,7 @@ function screenDocumentoDetalhe(){
     <div class="title">${esc(d.name||'Documento sem nome')}</div>
     <div class="subgreet">adicionado em ${fmtDate(new Date(d.addedDate))}</div>`;
   if(d.photoData){
-    html += `<img src="${d.photoData}" alt="Foto de ${esc(d.name)}" style="width:100%;border-radius:16px;box-shadow:0 1px 6px rgba(47,51,44,.08)">`;
+    html += `<img src="${d.photoData}" alt="Foto de ${esc(d.name)}" style="width:100%;border-radius:16px;box-shadow:0 1px 6px rgba(43,37,25,.08)">`;
   } else {
     html += `<div class="empty-state">Esse documento não tem foto anexada.</div>`;
   }
@@ -772,12 +806,12 @@ function screenOnboarding(){
 
   if(state.onboardingStep===0){
     html += `<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;text-align:center;padding:10px 4px">
-      <div style="font:500 32px/1.3 'Bricolage Grotesque', sans-serif;color:#272B26">Você vive.<br>O Importa lembra do resto.</div>
+      <div style="font:500 32px/1.3 'Newsreader', serif;color:#2B2519">Você vive.<br>O Importa lembra do resto.</div>
       <div style="font-size:15px;color:#6A6E60;line-height:1.55">Documento, benefício e consulta, tudo num lugar só. Sem você precisar decorar prazo nenhum.</div>
     </div>`;
   } else {
     html += `<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:10px 4px">
-      <div style="font:500 24px/1.3 'Bricolage Grotesque', sans-serif;color:#272B26;margin-bottom:6px">Três coisas, só isso</div>
+      <div style="font:500 24px/1.3 'Newsreader', serif;color:#2B2519;margin-bottom:6px">Três coisas, só isso</div>
       <div class="choice-card" style="cursor:default"><div class="choice-name">📷 Guardar um documento</div><div class="choice-sub">laudo, receita… tire uma foto e pronto</div></div>
       <div class="choice-card" style="cursor:default"><div class="choice-name">🌿 Acompanhar um benefício</div><div class="choice-sub">eu calculo quando renova e aviso a tempo</div></div>
       <div class="choice-card" style="cursor:default"><div class="choice-name">🩺 Marcar uma consulta</div><div class="choice-sub">com data, foto e tudo guardado junto</div></div>
@@ -840,15 +874,17 @@ function screenConta(){
     </div>`;
   }
 
+  const pixQr = pixQrDataUrl();
   html += `<div class="section-label">Apoie o Importa</div>
     <div class="card">
       <div class="card-title">Isso aqui é livre pra usar</div>
-      <div class="card-sub">Se o app te ajudou e você quiser contribuir com o projeto, fica à vontade. É opcional, não desbloqueia nada — o app já é seu por completo.</div>
-      <div class="card" style="margin-top:10px;background:#EEF1EB;text-align:center">
-        <div class="card-sub" style="margin-bottom:4px">Chave Pix (aleatória)</div>
-        <div style="font-family:monospace;font-size:14px;word-break:break-all;color:#272B26" id="pixKeyText">fa83a62a-fb37-4d41-8b96-51c9a9e5c56f</div>
+      <div class="card-sub">O Importa é mantido por uma pessoa só. Se ele te ajudou e você quiser contribuir, fica à vontade — é opcional, não desbloqueia nada, o app já é seu por completo.</div>
+      <div class="pix-panel">
+        ${pixQr ? `<img src="${pixQr}" alt="QR code Pix do Importa" class="pix-qr-img">` : ''}
+        <div class="pix-panel-label">${pixQr ? 'Escaneie no app do banco, ou copie a chave' : 'Copie a chave abaixo no app do banco'}</div>
+        <div class="pix-key" id="pixKeyText">${PIX_KEY}</div>
       </div>
-      <button class="btn-primary" style="margin-top:10px" onclick="copyPixKey()">Copiar chave Pix</button>
+      <button class="btn-primary" onclick="copyPixKey()">Copiar chave Pix</button>
       <div id="pixMsg" style="margin-top:8px;font-size:13px;color:#6A6E60;text-align:center"></div>
     </div>`;
 
@@ -864,7 +900,7 @@ function screenConta(){
       <div class="chip-choice ${mode==='criar'?'on':''}" onclick="state.contaMode='criar';render()">Criar conta</div>
       <div class="chip-choice ${mode==='entrar'?'on':''}" onclick="state.contaMode='entrar';render()">Já tenho conta</div>
     </div>
-    <button class="btn-primary" style="background:#fff;color:#272B26;border:1px solid #E2DFD4;display:flex;align-items:center;justify-content:center;gap:10px" onclick="loginWithGoogle(${mode==='criar'})">
+    <button class="btn-primary" style="background:#fff;color:#2B2519;border:1px solid #E2DFD4;display:flex;align-items:center;justify-content:center;gap:10px" onclick="loginWithGoogle(${mode==='criar'})">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.09-1.8 2.73v2.27h2.91c1.7-1.57 2.69-3.88 2.69-6.64z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.27c-.81.54-1.84.86-3.05.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.34C2.44 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.97 10.7c-.18-.54-.28-1.11-.28-1.7s.1-1.16.28-1.7V4.96H.96C.35 6.17 0 7.55 0 9s.35 2.83.96 4.04l3.01-2.34z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
       Continuar com Google
     </button>
@@ -936,11 +972,54 @@ async function checarPushAtivo(){
   } catch(e){ state.pushAtivo = false; }
 }
 
+const PIX_KEY = 'fa83a62a-fb37-4d41-8b96-51c9a9e5c56f';
+const PIX_NAME = 'IMPORTA';
+const PIX_CITY = 'FLORIANOPOLIS';
+
+function pixSanitize(str, maxLen){
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().slice(0, maxLen);
+}
+function pixTLV(id, value){
+  return id + String(value.length).padStart(2,'0') + value;
+}
+function pixCRC16(payload){
+  let crc = 0xFFFF;
+  for(let i=0; i<payload.length; i++){
+    crc ^= (payload.charCodeAt(i) << 8);
+    for(let j=0; j<8; j++){
+      crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4,'0');
+}
+function buildPixPayload(){
+  const merchantAccount = pixTLV('00','br.gov.bcb.pix') + pixTLV('01', PIX_KEY);
+  let payload =
+    pixTLV('00','01') +
+    pixTLV('01','11') +
+    pixTLV('26', merchantAccount) +
+    pixTLV('52','0000') +
+    pixTLV('53','986') +
+    pixTLV('58','BR') +
+    pixTLV('59', pixSanitize(PIX_NAME, 25)) +
+    pixTLV('60', pixSanitize(PIX_CITY, 15)) +
+    pixTLV('62', pixTLV('05','***'));
+  payload += '6304';
+  return payload + pixCRC16(payload);
+}
+function pixQrDataUrl(){
+  try{
+    const qr = qrcode(0, 'M');
+    qr.addData(buildPixPayload());
+    qr.make();
+    return qr.createDataURL(6, 8);
+  } catch(e){ return null; }
+}
+
 async function copyPixKey(){
   const msg = document.getElementById('pixMsg');
-  const key = document.getElementById('pixKeyText').textContent;
   try{
-    await navigator.clipboard.writeText(key);
+    await navigator.clipboard.writeText(PIX_KEY);
     if(msg) msg.textContent = 'Copiado! Cola no seu app do banco pra fazer o Pix.';
   } catch(e){
     if(msg) msg.textContent = 'Não deu pra copiar automático — seleciona o texto acima e copia manual.';
@@ -1015,7 +1094,7 @@ async function doSignOut(){
 function screenCarregando(){
   document.getElementById('content').innerHTML = `
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
-      <div style="width:46px;height:46px;border-radius:50%;background:#3E5A44;animation:pulse 1.4s ease-in-out infinite"></div>
+      <div style="width:46px;height:46px;border-radius:50%;background:#2E4A38;animation:pulse 1.4s ease-in-out infinite"></div>
       <div style="font-size:13.5px;color:#5D655C">abrindo o Importa…</div>
     </div>`;
 }
@@ -1038,8 +1117,8 @@ function render(){
     document.getElementById('navRow').innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">
         <div style="display:flex;gap:6px">
-          <div style="width:${state.onboardingStep===0?'22px':'7px'};height:7px;border-radius:4px;background:#3E5A44;transition:width .2s"></div>
-          <div style="width:${state.onboardingStep===1?'22px':'7px'};height:7px;border-radius:4px;background:#3E5A44;transition:width .2s"></div>
+          <div style="width:${state.onboardingStep===0?'22px':'7px'};height:7px;border-radius:4px;background:#2E4A38;transition:width .2s"></div>
+          <div style="width:${state.onboardingStep===1?'22px':'7px'};height:7px;border-radius:4px;background:#2E4A38;transition:width .2s"></div>
         </div>
         <button class="btn-primary" style="margin-top:0" onclick="nextOnboarding()">${state.onboardingStep===0?'Continuar':'Vamos começar'}</button>
       </div>`;
