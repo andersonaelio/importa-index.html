@@ -475,8 +475,16 @@ function confirmDelete(id, backTo, label){
 }
 
 async function deleteItem(id, backTo){
+  const item = state.items.find(i=>i.id===id);
   const { error } = await sb.from('importa_itens').delete().eq('id', id);
   if(error){ console.error('erro ao excluir', error); return; }
+  // Apaga a foto do Storage junto, senão fica orfã ocupando espaço do plano pra sempre.
+  // Roda depois do delete do registro (que é o que importa pro usuário) e não bloqueia
+  // a navegação se falhar — só loga, pra não travar a exclusão por causa da foto.
+  if(item && item.photo_path){
+    sb.storage.from('importa-fotos').remove([item.photo_path])
+      .then(({error})=>{ if(error) console.error('erro ao apagar foto orfa', error); });
+  }
   state.items = state.items.filter(i=>i.id!==id);
   go(backTo);
 }
