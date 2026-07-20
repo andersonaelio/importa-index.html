@@ -511,6 +511,15 @@ function screenConsultas(){
       <button class="btn-ghost" style="color:#A6493E;margin-top:6px;padding:6px 0" onclick="confirmDelete('${upcoming[0].id}','consultas','${esc(upcoming[0].subject)}')">Excluir consulta</button>
     </div>`;
   }
+  if(upcoming.length > 1){
+    html += `<div class="section-label">Depois</div>`;
+    upcoming.slice(1).forEach(c=>{
+      html += `<div class="list-row" style="padding:12px 16px" onclick="confirmDelete('${c.id}','consultas','${esc(c.subject)}')">
+        <div class="row-info"><div class="row-name" style="font-size:14.5px">${esc(c.subject)}</div>${c.doctor ? `<div class="row-meta" style="font-size:13px">${esc(c.doctor)}</div>` : ''}</div>
+        <div class="row-meta">${fmtDateHora(fmtDateShort(parseLocalDate(c.date)), c.time)}</div>
+      </div>`;
+    });
+  }
   if(past.length){
     html += `<div class="section-label">Já aconteceram</div>`;
     past.forEach(c=>{
