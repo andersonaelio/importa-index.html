@@ -54,7 +54,9 @@
   .dark .back-row { color:#8FAF8B; }
 
   .greet { font:500 30px/1.15 'Newsreader', serif; color:#2B2519; }
+  .dark .greet { color:#ECEFE6; }
   .subgreet { font-size:14px; color:#565A4E; margin-top:3px; }
+  .dark .subgreet { color:#A9B3A6; }
   .title { font:500 28px/1.15 'Newsreader', serif; color:#2B2519; margin-top:4px; }
   .dark .title { font:400 28px/1.15 'Newsreader', serif; color:#ECEFE6; }
   .dark .subtitle { font:italic 400 14.5px 'Newsreader', serif; color:#A9B3A6; margin-top:3px; }
@@ -63,6 +65,7 @@
   .dark .section-label { color:#8F998C; }
 
   .tag-attention { font:600 13px 'Wix Madefor Text', sans-serif; color:#82581C; display:flex; align-items:center; gap:7px; margin-top:6px; }
+  .dark .tag-attention { color:#D9A455; }
   .dot-amber { width:8px; height:8px; border-radius:50%; background:#C2903E; flex-shrink:0; }
 
   .card { background:#FBF7EC; border-radius:16px; padding:16px 17px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 8px 20px rgba(43,37,25,.09); transition:transform .15s ease, opacity .15s ease; }
@@ -77,6 +80,8 @@
 
   .calm-block { background:#DCE7D8; border-radius:16px; padding:14px 17px; display:flex; align-items:center; justify-content:space-between; }
   .calm-txt { font-size:14px; color:#374A3B; display:flex; align-items:center; gap:9px; }
+  .dark .calm-block { background:#26332A; }
+  .dark .calm-txt { color:#B9D1B0; }
 
   .toast { position:fixed; left:50%; bottom:96px; transform:translate(-50%, 14px); background:#2B2519; color:#FDF9EF; font-size:13.5px; padding:11px 18px; border-radius:999px; z-index:60; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; max-width:82%; text-align:center; }
   .toast.on { opacity:1; transform:translate(-50%, 0); }
@@ -87,18 +92,27 @@
   .offline-bar { display:none; background:#82581C; color:#FDF9EF; font-size:13px; line-height:1.4; padding:9px 16px; text-align:center; }
   .offline-bar.on { display:block; }
   .search-wrap { background:#FBF7EC; border-radius:999px; padding:10px 16px; display:flex; align-items:center; gap:9px; box-shadow:0 1px 6px rgba(43,37,25,.06); }
+  .dark .search-wrap { background:#2A342D; box-shadow:none; }
   .search-input { flex:1; border:none; background:none; outline:none; font:400 14.5px 'Wix Madefor Text', sans-serif; color:#2B2519; min-width:0; }
+  .dark .search-input { color:#ECEFE6; }
   .search-input::placeholder { color:#6A6656; }
+  .dark .search-input::placeholder { color:#9AA598; }
   .search-input::-webkit-search-cancel-button { display:none; }
   .search-clear { background:none; border:none; color:#565A4E; font-size:15px; cursor:pointer; padding:2px 4px; line-height:1; }
+  .dark .search-clear { color:#8F998C; }
 
   .list-row { background:#FBF7EC; border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 6px 16px rgba(43,37,25,.08); cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
   .list-row:active { transform:scale(0.97); opacity:.85; }
+  .dark .list-row { background:#2A342D; box-shadow:none; }
   .row-thumb { width:40px; height:40px; border-radius:11px; background:#DCE7D8; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  .dark .row-thumb { background:#33402F; }
   .row-info { flex:1; min-width:0; }
   .row-name { font-size:15px; font-weight:500; color:#2B2519; }
+  .dark .row-name { color:#ECEFE6; }
   .row-meta { font-size:13px; color:#5D655C; margin-top:2px; }
+  .dark .row-meta { color:#A9B3A6; }
   .chip-ok { font-size:13px; padding:3px 9px; border-radius:999px; background:#DCE7D8; color:#2E4A38; white-space:nowrap; }
+  .dark .chip-ok { background:#33402F; color:#8FAF8B; }
 
   .ring-row { display:flex; align-items:center; gap:15px; }
 
@@ -119,6 +133,7 @@
   .sheet-overlay { position:absolute; inset:0; background:rgba(39,43,38,0); display:flex; align-items:flex-end; z-index:10; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .25s ease, background .25s ease, visibility 0s linear .25s; }
   .sheet-overlay.open { opacity:1; visibility:visible; pointer-events:auto; background:rgba(39,43,38,.35); transition:opacity .25s ease, background .25s ease, visibility 0s linear 0s; }
   .sheet { background:#F7F5EF; border-radius:24px 24px 0 0; padding:14px 22px 32px; width:100%; max-height:88%; overflow-y:auto; transform:translateY(28px); transition:transform .3s cubic-bezier(.22,.68,0,1.01); }
+  .dark .sheet { background:#232D26; }
   .sheet-overlay.open .sheet { transform:translateY(0); }
   .img-viewer { position:fixed; inset:0; background:rgba(20,17,10,.94); z-index:50; display:none; align-items:center; justify-content:center; opacity:0; transition:opacity .2s ease; -webkit-overflow-scrolling:touch; overflow:auto; }
   .img-viewer.open { display:flex; opacity:1; }
@@ -137,27 +152,43 @@
   .img-viewer.open img { animation:imgViewerIn .25s cubic-bezier(.22,.68,0,1.01); }
   @keyframes imgViewerIn { from{opacity:0; transform:scale(.92);} to{opacity:1; transform:scale(1);} }
   .sheet-handle { width:38px; height:4px; border-radius:2px; background:#D5D2C6; margin:0 auto 18px; }
+  .dark .sheet-handle { background:#48544A; }
   .sheet-title { font:500 22px/1.2 'Newsreader', serif; color:#2B2519; margin-bottom:16px; }
+  .dark .sheet-title { color:#ECEFE6; }
   .choice-card { background:#FDF9EF; border-radius:16px; padding:16px; box-shadow:0 1px 2px rgba(43,37,25,.05), 0 8px 20px rgba(43,37,25,.09); margin-bottom:10px; cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
   .choice-card:active { transform:scale(0.97); opacity:.85; }
+  .dark .choice-card { background:#2A342D; box-shadow:none; }
   .choice-name { font-size:16px; font-weight:600; color:#2B2519; }
+  .dark .choice-name { color:#ECEFE6; }
   .choice-sub { font-size:13px; color:#565A4E; margin-top:2px; }
+  .dark .choice-sub { color:#A9B3A6; }
   .field-label { font-size:13px; font-weight:600; color:#565A4E; text-transform:uppercase; letter-spacing:.4px; margin:14px 0 6px; }
+  .dark .field-label { color:#8F998C; }
   .field-input { width:100%; background:#FDF9EF; border:1px solid #E2DFD4; border-radius:12px; padding:13px 15px; font-size:15px; color:#2B2519; font-family:'Wix Madefor Text', sans-serif; transition:border-color .15s ease; }
   .field-input:focus { border-color:#2E4A38; outline:none; }
+  .dark .field-input { background:#2A342D; border-color:#3B473D; color:#ECEFE6; }
+  .dark .field-input::placeholder { color:#9AA598; }
+  .dark .field-input:focus { border-color:#8FAF8B; }
   .chip-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
   .chip-choice { padding:9px 16px; border-radius:999px; font-size:13.5px; background:#FDF9EF; box-shadow:0 1px 4px rgba(43,37,25,.08); cursor:pointer; color:#2B2519; transition:background .15s ease, color .15s ease, transform .15s ease; }
   .chip-choice.on { background:#2F332C; color:#FDF9EF; }
   .chip-choice:active { transform:scale(0.95); }
+  .dark .chip-choice { background:#2A342D; box-shadow:none; color:#ECEFE6; }
+  .dark .chip-choice.on { background:#ECEFE6; color:#202823; }
   .suggestion-box { background:#E4EBE0; border-radius:14px; padding:14px 16px; margin-top:10px; }
   .suggestion-name { font:500 16px 'Newsreader', serif; color:#2F332C; }
   .suggestion-sub { font-size:13px; color:#5E6B58; margin-top:3px; }
+  .dark .suggestion-box { background:#26332A; }
+  .dark .suggestion-name { color:#ECEFE6; }
+  .dark .suggestion-sub { color:#A9B3A6; }
   .btn-primary { width:100%; background:#2E4A38; color:#F6F1E4; border:none; border-radius:999px; padding:15px; font-size:15.5px; font-weight:600; margin-top:18px; cursor:pointer; font-family:'Wix Madefor Text', sans-serif; transition:transform .15s ease, opacity .15s ease; }
   .btn-primary:active { transform:scale(0.98); opacity:.9; }
   .btn-ghost { width:100%; background:none; border:none; color:#565A4E; padding:12px; font-size:14px; text-align:center; cursor:pointer; transition:opacity .15s ease; }
   .btn-ghost:active { opacity:.6; }
+  .dark .btn-ghost { color:#A9B3A6; }
   .photo-box { height:120px; border:1.5px dashed #B9B3A6; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#6A6656; font-size:13px; margin-top:10px; cursor:pointer; overflow:hidden; transition:border-color .15s ease, opacity .15s ease; }
   .photo-box:active { opacity:.7; }
+  .dark .photo-box { border-color:#3B473D; color:#8F998C; }
   .pix-panel { background:#F1EAD9; border-radius:16px; padding:20px 18px; margin-top:14px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
   .dark .pix-panel { background:#242E27; }
   .pix-qr-img { width:156px; height:156px; border-radius:10px; background:#fff; padding:10px; image-rendering:pixelated; }
@@ -165,6 +196,14 @@
   .dark .pix-panel-label { color:#A9B3A6; }
   .pix-key { font-family:ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size:13.5px; word-break:break-all; color:#2B2519; background:#FBF7EC; border-radius:10px; padding:9px 12px; width:100%; }
   .dark .pix-key { color:#ECEFE6; background:#2A342D; }
+  .dark-switch { width:48px; height:28px; border-radius:999px; background:#E2DFD4; border:none; cursor:pointer; position:relative; flex-shrink:0; transition:background .18s ease; }
+  .dark-switch.on { background:#2E4A38; }
+  .dark-switch-knob { position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#FDF9EF; transition:transform .18s ease; display:block; }
+  .dark-switch.on .dark-switch-knob { transform:translateX(20px); }
+  .dark .dark-switch { background:#3B473D; }
+  .dark .dark-switch.on { background:#8FAF8B; }
+  .dark .dark-switch-knob { background:#ECEFE6; }
+  .dark .dark-switch.on .dark-switch-knob { background:#202823; }
   [tabindex]:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid #2E4A38; outline-offset:2px; }
   .dark [tabindex]:focus-visible, .dark button:focus-visible { outline-color:#C6D9BC; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation:none !important; } }
@@ -298,7 +337,22 @@ function showIOSInstallSheet(generic){
   document.getElementById('sheetOverlay').classList.add('open');
 }
 
-let state = { view: localStorage.getItem('importa_onboarded') ? 'carregando' : 'onboarding', onboardingStep:0, items:[], addStep:null, addType:null, draft:{} };
+// Prioridade: escolha salva da pessoa > preferência do aparelho > claro.
+function temPreferenciaDeDispositivoEscura(){
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+let state = {
+  view: localStorage.getItem('importa_onboarded') ? 'carregando' : 'onboarding',
+  onboardingStep:0, items:[], addStep:null, addType:null, draft:{},
+  darkMode: localStorage.getItem('importa_dark') != null
+    ? localStorage.getItem('importa_dark') === '1'
+    : temPreferenciaDeDispositivoEscura()
+};
+function alternarModoEscuro(){
+  state.darkMode = !state.darkMode;
+  localStorage.setItem('importa_dark', state.darkMode ? '1' : '0');
+  render();
+}
 
 async function ensureAuth(){
   const { data: { session } } = await sb.auth.getSession();
@@ -399,7 +453,25 @@ function screenHoje(){
   const soonBens = bens.filter(b=> daysBetween(new Date(), b.next) <= 90);
   const calmCount = state.items.length - (nextConsulta?1:0) - soonBens.length;
 
-  let html = `<div class="greet">Oi</div><div class="subgreet">o que precisa de você agora</div>`;
+  let saudacao = 'Boa noite';
+  const hora = new Date().getHours();
+  const periodo = (hora >= 5 && hora < 12) ? 'manha' : (hora >= 12 && hora < 18) ? 'tarde' : 'noite';
+  if(periodo==='manha') saudacao = 'Bom dia';
+  else if(periodo==='tarde') saudacao = 'Boa tarde';
+
+  const hojeSemHora = new Date(new Date().toDateString());
+  const consultaEhHoje = nextConsulta && parseLocalDate(nextConsulta.date).getTime() === hojeSemHora.getTime();
+
+  let subgreet;
+  if(consultaEhHoje) subgreet = 'sua consulta é hoje';
+  else if(nextConsulta) subgreet = 'tem uma consulta chegando';
+  else if(soonBens.length) subgreet = 'um benefício seu está perto de renovar';
+  else if(state.items.length===0) subgreet = 'vamos guardar a primeira coisa?';
+  else if(periodo==='manha') subgreet = 'o dia começa tranquilo por aqui';
+  else if(periodo==='tarde') subgreet = 'a tarde segue tranquila por aqui';
+  else subgreet = 'por hoje, está tudo em dia';
+
+  let html = `<div class="greet">${saudacao}</div><div class="subgreet">${esc(subgreet)}</div>`;
 
   if(nextConsulta){
     html += `<div class="tag-attention"><span class="dot-amber"></span>Precisa de você</div>
@@ -751,6 +823,8 @@ function screenConsultaDetalhe(){
 
 function screenBeneficios(){
   const bens = beneficios();
+  const ringTrack = state.darkMode ? '#3B473D' : '#E2DFD4';
+  const ringColor = state.darkMode ? '#8FAF8B' : '#2E4A38';
   let html = `<div class="back-row" onclick="go('guardados')">← Guardados</div><div class="title">Benefícios</div><div class="subtitle">o que renova, e quando</div>`;
   if(bens.length===0){
     html += `<div class="empty-state">Nenhum benefício guardado ainda.<br><button class="btn-primary" style="margin-top:14px" onclick="chooseType('beneficio')">Acompanhar um benefício</button></div>`;
@@ -760,8 +834,8 @@ function screenBeneficios(){
       const dash = ringDash(b.renewedDate, b.cycleYears);
       html += `<div class="card ring-row">
         <svg width="50" height="50" viewBox="0 0 34 34" style="flex-shrink:0">
-          <circle cx="17" cy="17" r="14" fill="none" stroke="#3B473D" stroke-width="3"/>
-          <circle cx="17" cy="17" r="14" fill="none" stroke="#8FAF8B" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 88" data-dash="${dash}" class="ring-fill" transform="rotate(-90 17 17)"/>
+          <circle cx="17" cy="17" r="14" fill="none" stroke="${ringTrack}" stroke-width="3"/>
+          <circle cx="17" cy="17" r="14" fill="none" stroke="${ringColor}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 88" data-dash="${dash}" class="ring-fill" transform="rotate(-90 17 17)"/>
         </svg>
         <div style="flex:1;cursor:pointer" onclick="editBenefit('${b.id}')">
           <div class="card-title">${esc(b.name)}</div>
@@ -1218,6 +1292,12 @@ function screenConta(){
     state.oauthErro = null;
   }
 
+  html += `<div class="section-label">Aparência</div>
+  <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <div><div class="card-title" style="font-size:15.5px">Modo escuro</div><div class="card-sub">Vale pro app inteiro, não só numa tela.</div></div>
+    <button class="dark-switch ${state.darkMode?'on':''}" onclick="alternarModoEscuro()" role="switch" aria-checked="${state.darkMode}" aria-label="Modo escuro"><span class="dark-switch-knob"></span></button>
+  </div>`;
+
   html += `<div class="section-label">Lembretes</div>`;
   if(state.pushAtivo){
     html += `<div class="card"><div class="card-title">Ativados neste aparelho</div><div class="card-sub">Você recebe um aviso quando um benefício ou consulta estiver perto do prazo.</div></div>`;
@@ -1494,7 +1574,7 @@ function screenCarregando(){
 
 function render(){
   const phone = document.getElementById('phone');
-  phone.className = 'phone ' + (state.view==='beneficios' ? 'dark' : 'light');
+  phone.className = 'phone ' + (state.darkMode ? 'dark' : 'light');
 
   if(state.view==='onboarding') screenOnboarding();
   else if(state.view==='carregando') { screenCarregando(); document.getElementById('navRow').innerHTML=''; return; }
