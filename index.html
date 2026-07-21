@@ -1112,10 +1112,19 @@ function acceptMatch(){
   renderSheet();
 }
 function customBenefit(){
+  logBuscaSemMatch(state.draft.typed);
   state.draft.name = state.draft.typed;
   state.draft.cycleYears = null;
   state.addStep = 'beneficio-cycle';
   renderSheet();
+}
+// Guarda o termo que a pessoa digitou e não bateu em nenhum benefício conhecido. Não trava
+// a tela se falhar (nem se a tabela ficar indisponível) — é só pra alimentar a lista de
+// sinônimos com o tempo, nunca deve atrapalhar quem está tentando guardar um benefício.
+async function logBuscaSemMatch(termo){
+  if(!termo || !termo.trim()) return;
+  try{ await sb.from('importa_buscas_sem_match').insert({ termo: termo.trim() }); }
+  catch(e){ console.error('erro ao registrar busca sem match', e); }
 }
 function pickCycle(y){ state.draft.cycleYears = y; renderSheet(); }
 
