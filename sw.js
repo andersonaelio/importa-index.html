@@ -18,7 +18,11 @@ self.addEventListener('push', event => {
 // Ao tocar na notificação, abre o app (ou foca a aba já aberta, se tiver uma)
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  const url = event.notification.data && event.notification.data.url ? event.notification.data.url : '/';
+  // Só aceita caminho interno (começa com "/"), nunca URL de fora do app.
+  // Mesmo o push só sendo aceito com a VAPID key certa, isso evita que um
+  // payload de notificação mande a pessoa pra um site de phishing.
+  const dataUrl = event.notification.data && event.notification.data.url;
+  const url = (typeof dataUrl === 'string' && dataUrl.startsWith('/') && !dataUrl.startsWith('//')) ? dataUrl : '/';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
       for (const client of windowClients) {
