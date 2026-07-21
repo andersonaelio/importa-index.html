@@ -23,7 +23,7 @@
     L128-140  body — shell do app (.phone, content, nav, sheet-overlay)
     L142-580  JS — boot, auth, Supabase, PDF export, showIOSInstallSheet()
     L581-1024 JS — renderSheet() (fluxo de adicionar documento/consulta/benefício)
-    L1025-fim JS — render() (todas as telas: home, listas, detalhe, conta, onboarding)
+    L1025-fim JS — render() (todas as telas: home, listas, detalhe, conta, onboarding, privacidade)
   */
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body {
@@ -1255,6 +1255,7 @@ function screenOnboarding(){
       <div class="choice-card" style="cursor:default"><div class="choice-name">🌿 Acompanhar um benefício</div><div class="choice-sub">eu calculo quando renova e aviso a tempo</div></div>
       <div class="choice-card" style="cursor:default"><div class="choice-name">🩺 Marcar uma consulta</div><div class="choice-sub">com data, foto e tudo guardado junto</div></div>
       ${!isStandalone ? `<button class="btn-ghost" onclick="promptInstall()">📲 Instalar na tela inicial do celular</button>` : ''}
+      <div style="text-align:center;font-size:12.5px;color:#8A9186;margin-top:4px">Ao continuar, você concorda com a nossa <span style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation();showPrivacidade()">política de privacidade</span>.</div>
     </div>`;
   }
   document.getElementById('content').innerHTML = html;
@@ -1273,6 +1274,37 @@ function finishOnboarding(){
 function reopenTutorial(){
   state.onboardingStep = 0;
   go('onboarding');
+}
+
+function showPrivacidade(){
+  const sheet = document.getElementById('sheet');
+  sheet.innerHTML = `<div class="sheet-handle"></div>
+    <div class="sheet-title">Privacidade</div>
+    <div style="font-size:14px;line-height:1.6;color:${state.darkMode?'#A9B3A6':'#2F332C'};max-height:55vh;overflow-y:auto;padding-right:4px">
+      <p style="margin-bottom:12px"><strong>O que o Importa guarda</strong><br>
+      Só o que você escolhe colocar aqui dentro: nome de documento, foto, data de consulta, benefício acompanhado. Se você criar uma conta, guarda também seu e-mail. Nada é coletado sem você agir.</p>
+
+      <p style="margin-bottom:12px"><strong>Onde fica guardado</strong><br>
+      Seus dados ficam num banco de dados protegido (Supabase), com criptografia em trânsito e controle de acesso por usuário. Cada pessoa só vê o que é dela. As fotos ficam num armazenamento privado, acessível só por você.</p>
+
+      <p style="margin-bottom:12px"><strong>Dado de saúde</strong><br>
+      Documentos como laudos e receitas são considerados dados sensíveis pela LGPD (Lei Geral de Proteção de Dados). O Importa trata esses dados com cuidado extra: acesso restrito, sem compartilhamento com terceiros, sem uso pra propaganda.</p>
+
+      <p style="margin-bottom:12px"><strong>Com quem é compartilhado</strong><br>
+      Com ninguém. O Importa não vende, não repassa e não usa seus dados pra nenhum outro fim além de mostrar eles pra você. Se você fizer uma doação via Pix, essa transação acontece direto no app do seu banco, o Importa não processa nem armazena dado bancário.</p>
+
+      <p style="margin-bottom:12px"><strong>Seus direitos</strong><br>
+      Você pode, a qualquer momento: ver tudo que está guardado (já está na tela), corrigir qualquer informação (editando o item), e excluir qualquer coisa ou tudo de uma vez. Se quiser que seus dados sejam completamente apagados do banco, é só pedir.</p>
+
+      <p style="margin-bottom:12px"><strong>Notificações</strong><br>
+      Se você ativar os lembretes, o Importa usa notificação push pra avisar sobre prazos. Nenhuma mensagem promocional é enviada, só avisos sobre coisas que você mesmo cadastrou.</p>
+
+      <p style="margin-bottom:0"><strong>Contato</strong><br>
+      O Importa é mantido por uma pessoa. Se tiver qualquer dúvida sobre seus dados, fala comigo: <span style="text-decoration:underline">andersonaelio1@gmail.com</span></p>
+    </div>
+    <button class="btn-primary" onclick="closeSheet()">Entendi</button>`;
+  a11yEnhance(sheet);
+  document.getElementById('sheetOverlay').classList.add('open');
 }
 
 /* ---------- RENDER ---------- */
@@ -1364,6 +1396,7 @@ function screenConta(){
     html += `<div id="contaMsg" style="margin-top:10px;font-size:13.5px;color:#565A4E"></div>`;
   }
   html += `<div class="back-row" style="justify-content:center;margin-top:14px" onclick="reopenTutorial()">❓ Ver como o app funciona</div>`;
+  html += `<div class="back-row" style="justify-content:center;margin-top:4px" onclick="showPrivacidade()">🔒 Privacidade</div>`;
   document.getElementById('content').innerHTML = html;
 }
 
