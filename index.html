@@ -475,7 +475,7 @@ function ringDash(renewedDate, cycleYears){
 }
 function nextRenewal(renewedDate, cycleYears){ return addYears(renewedDate, cycleYears); }
 
-function go(view, extra){ state.view = view; state.viewExtra = extra; state.busca = ''; closeSheet(); render(); }
+function go(view, extra){ state.view = view; state.viewExtra = extra; state.busca = ''; state.guiaBusca = ''; state.guiaAberto = null; closeSheet(); render(); }
 
 /* ---------- SCREENS ---------- */
 
@@ -837,7 +837,7 @@ function screenConsultas(){
       html += `<div class="list-row" style="padding:12px 16px" onclick="go('consultaDetalhe','${c.id}')">
         <div class="row-info"><div class="row-name" style="font-size:14.5px;color:${passadaCor}">${esc(c.subject)}</div></div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:11.5px;padding:2px 8px;border-radius:8px 3px 8px 3px;border:1px solid ${passadaTagBorda};color:${passadaTagCor};white-space:nowrap">Aconteceu</span>
+          <span style="font-size:13px;padding:2px 8px;border-radius:8px 3px 8px 3px;border:1px solid ${passadaTagBorda};color:${passadaTagCor};white-space:nowrap">Aconteceu</span>
           <div class="row-meta">${fmtDateHora(fmtDateShort(parseLocalDate(c.date)), c.time)}</div>
         </div>
       </div>`;
@@ -892,10 +892,136 @@ function screenBeneficios(){
     });
   }
   document.getElementById('content').innerHTML = html;
+  const guiaEl = document.getElementById('content');
+  guiaEl.insertAdjacentHTML('beforeend', `<div class="back-row" style="justify-content:center;margin-top:${bens.length===0?'8px':'4px'}" onclick="go('guiaBeneficios')">💡 Não sabe quais benefícios existem? Veja aqui</div>`);
   requestAnimationFrame(()=>{
     document.querySelectorAll('.ring-fill').forEach(r=>{ r.setAttribute('stroke-dasharray', r.dataset.dash); });
   });
 }
+
+/* ---------- GUIA DE BENEFÍCIOS (conteúdo estático, checado nas fontes oficiais) ---------- */
+// Conteúdo revisado em jul/2026. Isso não é automatizado — precisa ser conferido
+// e atualizado manualmente de tempos em tempos, valores e regras mudam.
+// Mesma lista do KNOWN_BENEFITS (autocomplete de "adicionar benefício"), pra cobrir
+// exatamente o que a pessoa pode cadastrar no app.
+const GUIA_BENEFICIOS = [
+  {
+    nome: 'BPC / LOAS', curto: 'BPC/LOAS',
+    texto: 'Um salário mínimo por mês pra pessoa com deficiência (qualquer idade) ou idosa (65+) de baixa renda. Não é aposentadoria — não precisa ter contribuído com o INSS. O critério é renda familiar de até ¼ do salário mínimo por pessoa da casa.',
+    link: 'https://www.gov.br/mds/pt-br/acoes-e-programas/suas/beneficios-assistenciais/beneficio-assistencial-ao-idoso-e-a-pessoa-com-deficiencia-bpc',
+    fonte: 'gov.br/mds'
+  },
+  {
+    nome: 'Cadastro Único (CadÚnico)', curto: 'CadÚnico',
+    texto: 'A porta de entrada pra vários programas sociais — Bolsa Família, BPC, Tarifa Social de Energia, entre outros. Cadastra a família inteira uma vez; depois só precisa manter atualizado a cada 2 anos, ou sempre que mudar renda ou endereço.',
+    link: 'https://www.gov.br/mds/pt-br/acoes-e-programas/cadastro-unico',
+    fonte: 'gov.br/mds'
+  },
+  {
+    nome: 'Passe Livre Interestadual', curto: 'Passe Livre',
+    texto: 'Passagem gratuita em ônibus, trem ou barco entre estados, pra quem tem deficiência e renda familiar de até 1 salário mínimo por pessoa. Vale só pra viagem interestadual — não cobre transporte dentro da cidade.',
+    link: 'https://www.gov.br/pt-br/servicos/obter-passe-livre-interestadual-digital',
+    fonte: 'gov.br'
+  },
+  {
+    nome: 'Carteirinha de Ônibus (municipal)', curto: 'Ônibus municipal',
+    texto: 'A carteirinha do dia a dia, pra andar de ônibus na sua cidade — diferente do Passe Livre Interestadual, que só vale entre estados. Cada prefeitura (ou empresa de ônibus) define a regra e onde pedir.',
+    variaPor: 'cada prefeitura tem seu próprio processo — procure "passe livre municipal PCD" + o nome da sua cidade'
+  },
+  {
+    nome: 'CIPTEA — Carteira de Identificação da Pessoa com TEA', curto: 'CIPTEA',
+    texto: 'Documento nacional (Lei Romeo Mion) que identifica quem tem TEA e garante atendimento prioritário em saúde, educação e assistência social. Validade de 5 anos em todo o Brasil.',
+    variaPor: 'a emissão é feita por cada estado — procure "CIPTEA" + o nome do seu estado, geralmente no site do governo estadual'
+  },
+  {
+    nome: 'Credencial de estacionamento PCD', curto: 'Estacionamento PCD',
+    texto: 'Autoriza o uso das vagas reservadas de estacionamento. Desde 2024 é digital e nacional — dá pra emitir pelo aplicativo Carteira Digital de Trânsito (CDT) ou pelo Portal da Senatran, sem precisar ir a um posto.',
+    link: 'https://www.gov.br/pt-br/servicos/emitir-credencial-de-estacionamento-digital',
+    fonte: 'gov.br'
+  },
+  {
+    nome: 'Isenção de IPI (veículo)', curto: 'Isenção de IPI',
+    texto: 'Pra quem tem deficiência física, visual, auditiva, mental severa/profunda ou é autista: dá pra comprar um carro (um a cada 3 anos) sem pagar IPI, e também costuma dar pra pedir a isenção de IOF no mesmo processo.',
+    link: 'https://www.gov.br/pt-br/servicos/obter-isencao-de-impostos-para-comprar-carro',
+    fonte: 'gov.br'
+  },
+  {
+    nome: 'Isenção de ICMS (veículo)', curto: 'Isenção de ICMS',
+    texto: 'Costuma vir depois da isenção de IPI aprovada pela Receita Federal — esse pedido é separado, feito direto na Secretaria da Fazenda do seu estado.',
+    variaPor: 'prazo e regra mudam de estado pra estado — procure "isenção ICMS deficiente" + o nome do seu estado'
+  },
+  {
+    nome: 'Auxílio-Inclusão', curto: 'Auxílio-Inclusão',
+    texto: 'Pra quem já recebe (ou recebeu nos últimos 5 anos) o BPC e consegue um emprego com carteira assinada: em vez de perder o BPC de uma vez, passa a receber esse auxílio, equivalente a meio salário mínimo.',
+    link: 'https://www.gov.br/mds/pt-br/acoes-e-programas/suas/beneficios-assistenciais/auxilio-inclusao',
+    fonte: 'gov.br/mds'
+  },
+  {
+    nome: 'Isenção de IPVA (veículo)', curto: 'Isenção de IPVA',
+    texto: 'Isenção do imposto anual do veículo adaptado. Costuma ser renovada todo ano, e às vezes pede um laudo médico atualizado.',
+    variaPor: 'é um imposto estadual — procure "isenção IPVA deficiente" + o nome do seu estado, geralmente na Secretaria da Fazenda'
+  },
+  {
+    nome: 'PEI — Plano Educacional Individualizado', curto: 'PEI',
+    texto: 'Não é um benefício do governo com portal — é um plano de adaptação pedagógica feito junto com a escola do seu filho ou dependente, pra ajustar o ensino às necessidades dele.',
+    variaPor: 'não tem site oficial — o pedido é feito direto com a coordenação ou direção da escola'
+  }
+];
+
+function screenGuiaBeneficios(){
+  const linkCor = state.darkMode ? '#F0A94E' : '#8F4F16';
+  const variaCor = state.darkMode ? '#B4A184' : '#6E5D4C';
+  const termo = state.guiaBusca || '';
+  const alvo = normalizar(termo.trim());
+  const indicesFiltrados = GUIA_BENEFICIOS.map((b,i)=>i).filter(i=>!alvo || normalizar(GUIA_BENEFICIOS[i].nome).includes(alvo));
+
+  let html = `<div class="back-row" onclick="go('beneficios')">← Benefícios</div>
+    <div class="title">O que existe por aí</div>
+    <div class="subtitle">alguns direitos que talvez você não saiba que tem</div>
+    <div class="suggestion-box" style="margin-top:2px">
+      <div class="suggestion-sub" style="margin-top:0;line-height:1.5">Conteúdo checado em julho de 2026, direto nas fontes oficiais — mas regra e valor mudam. Antes de contar com algo aqui, confirma sempre no link oficial de cada um.</div>
+    </div>
+    <div class="search-wrap" style="margin-top:12px">
+      <span aria-hidden="true">🔍</span>
+      <input class="search-input" id="guiaBuscaInput" type="search" placeholder="Procurar um benefício…"
+             aria-label="Procurar nos benefícios" value="${esc(termo)}" oninput="onGuiaBusca(this.value)">
+      ${termo ? `<button class="search-clear" onclick="limparGuiaBusca()" aria-label="Limpar busca">✕</button>` : ''}
+    </div>
+    <div class="chip-row" style="flex-wrap:wrap;margin-top:12px">`;
+
+  if(indicesFiltrados.length===0){
+    html += `</div><div class="empty-state">Nada encontrado com "${esc(termo)}".</div>`;
+  } else {
+    indicesFiltrados.forEach(i=>{
+      const b = GUIA_BENEFICIOS[i];
+      const aberto = state.guiaAberto === i;
+      html += `<div class="chip-choice ${aberto?'on':''}" onclick="toggleGuiaBeneficio(${i})" role="button" tabindex="0" aria-expanded="${aberto}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGuiaBeneficio(${i})}">${esc(b.curto)}</div>`;
+    });
+    html += `</div>`;
+
+    if(state.guiaAberto !== null && indicesFiltrados.includes(state.guiaAberto)){
+      const b = GUIA_BENEFICIOS[state.guiaAberto];
+      const rodape = b.link
+        ? `<a href="${esc(b.link)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:13.5px;color:${linkCor};text-decoration:none">Ver em ${esc(b.fonte)} ↗</a>`
+        : `<div style="margin-top:10px;font-size:13px;color:${variaCor}">🔍 ${esc(b.variaPor)}</div>`;
+      html += `<div class="card" style="margin-top:14px">
+        <div class="card-title">${esc(b.nome)}</div>
+        <div class="card-sub" style="margin-top:6px;line-height:1.5">${esc(b.texto)}</div>
+        ${rodape}
+      </div>`;
+    } else {
+      html += `<div class="empty-state" style="margin-top:14px">Toque num nome acima pra ver os detalhes.</div>`;
+    }
+  }
+  document.getElementById('content').innerHTML = html;
+  if(termo){
+    const inp = document.getElementById('guiaBuscaInput');
+    if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  }
+}
+function onGuiaBusca(v){ state.guiaBusca = v; render(); }
+function limparGuiaBusca(){ state.guiaBusca = ''; render(); }
+function toggleGuiaBeneficio(i){ state.guiaAberto = (state.guiaAberto===i) ? null : i; render(); }
 
 /* ---------- ADD FLOW (sheet) ---------- */
 
@@ -1672,6 +1798,7 @@ function render(){
   else if(state.view==='consultas') screenConsultas();
   else if(state.view==='consultaDetalhe') screenConsultaDetalhe();
   else if(state.view==='beneficios') screenBeneficios();
+  else if(state.view==='guiaBeneficios') screenGuiaBeneficios();
 
   const contentEl = document.getElementById('content');
   contentEl.classList.remove('fade-in');
